@@ -32,6 +32,32 @@ class Product
      */
     private $public_date;
 
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Person")
+     * @ORM\JoinTable(name="person_like_product",
+     *  joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")},
+     *  inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")}
+     *  )
+     */
+    private $likes;
+
+    public function __construct() {
+        $this->$likes = new ArrayCollection();
+    }
+
+    public function addPersonProduct(Person $person) {
+        if ($this->$likes->contains($person)) {
+            return;
+        }
+        $this->$likes[] = $person;
+    }
+
+    public function getPersonProducts() {
+        return $this->$likes;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;

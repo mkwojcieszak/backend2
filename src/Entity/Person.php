@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PersonRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity(repositoryClass=PersonRepository::class)
  */
@@ -36,6 +36,8 @@ class Person
      * @ORM\Column(type="smallint")
      */
     private $state;
+
+
 
     public function getId(): ?int
     {
