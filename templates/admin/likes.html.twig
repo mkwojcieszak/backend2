@@ -15,26 +15,38 @@
     </div>
 {% endfor %}
 
-Products: 
-<select onchange="
-    document.querySelector('.product-input').value = this.options[this.selectedIndex].text;
-">
-<option value="-1"></option>
-{% for product in selectProducts %}
-<option value="{{product.id}}">{{product.name}}</option>
-{% endfor %}
-</select>
-<br>
-Persons: 
-<select onchange="
-    document.querySelector('.person-input').value = this.options[this.selectedIndex].text;
-">
-<option value="-1"></option>
-{% for person in selectPersons %}
-<option value="{{person.id}}">{{person.login}}</option>
-{% endfor %}
-</select>
-<br>
+{% if selectProducts|length > 0 or selectPersons|length > 0 %}
+    <h5>Search results depend on text input and not selected option.<br>
+    Select fields are here just to help you fill whole Product Name or Person Login text input.</h5>
+    {% if selectProducts|length > 0 %}
+        Products: 
+        <select onchange="
+            document.querySelector('.product-input').value = this.options[this.selectedIndex].text;
+        ">
+        <option value="-1"></option>
+        {% for product in selectProducts %}
+        <option value="{{product.id}}">{{product.name}}</option>
+        {% endfor %}
+        </select>
+        <br>
+    {% endif %}
+
+    {% if selectPersons|length > 0 %}
+        Persons: 
+        <select onchange="
+            document.querySelector('.person-input').value = this.options[this.selectedIndex].text;
+        ">
+        <option value="-1"></option>
+        {% for person in selectPersons %}
+        <option value="{{person.id}}">{{person.login}}</option>
+        {% endfor %}
+        </select>
+        <br>
+    {% endif %}
+{% else %}
+    <h5>Write at least 1 character of Product Name or Person Login and press <b>Search</b></h5>
+{% endif %}
+
 {{ form(form) }}
 {% if product != null and person != null%}
     {% if resultLikes|length == 0 %}
@@ -45,10 +57,10 @@ Persons:
     {% endif %}
 {% else %}
     {% if product != null and person == null %}
-        <h2>Results for {{product}}:</h2>
+        <h2>Results for product {{product}}:</h2>
     {% endif %}
     {% if product == null and person != null %}
-        <h2>Results for {{person}}:</h2>
+        <h2>Results for person {{person}}:</h2>
     {% endif %}
     <ul>
     {% for like in resultLikes %}
@@ -61,7 +73,7 @@ Persons:
     </ul>
 {% endif %}
 <br>
-<a href='{{ path('admin.panel') }}'><button class='btn btn-primary'>Panel</button></a><br>
+<a href='{{ path('admin.panel') }}'><button class='btn btn-primary'>Panel</button></a>
     <a href='{{ path('app_logout') }}'><button class='btn btn-primary'>Logout</button></a>
 {% endblock %}
 

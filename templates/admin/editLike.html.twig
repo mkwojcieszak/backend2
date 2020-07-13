@@ -14,27 +14,37 @@
     </div>
 {% endfor %}
 
-Products: 
-<select onchange="
-    document.querySelector('.product-input').value = this.options[this.selectedIndex].text;
-">
-<option value="-1"></option>
-{% for product in selectProducts %}
-<option value="{{product.id}}">{{product.name}}</option>
-{% endfor %}
-</select>
-<br>
-Persons: 
-<select onchange="
-    document.querySelector('.person-input').value = this.options[this.selectedIndex].text;
-">
-<option value="-1"></option>
-{% for person in selectPersons %}
-<option value="{{person.id}}">{{person.login}}</option>
-{% endfor %}
-</select>
+{% if selectProducts|length > 0 or selectPersons|length > 0 %}
+    <h5>Search results depend on text input and not selected option.<br>
+    Select fields are here just to help you fill whole Product Name or Person Login text input.</h5>
+    {% if selectProducts|length > 0 %}
+        Products: 
+        <select onchange="
+            document.querySelector('.product-input').value = this.options[this.selectedIndex].text;
+        ">
+        <option value="-1"></option>
+        {% for product in selectProducts %}
+        <option value="{{product.id}}">{{product.name}}</option>
+        {% endfor %}
+        </select>
+        <br>
+    {% endif %}
 
-<br>
+    {% if selectPersons|length > 0 %}
+        Persons: 
+        <select onchange="
+            document.querySelector('.person-input').value = this.options[this.selectedIndex].text;
+        ">
+        <option value="-1"></option>
+        {% for person in selectPersons %}
+        <option value="{{person.id}}">{{person.login}}</option>
+        {% endfor %}
+        </select>
+        <br>
+    {% endif %}
+{% else %}
+    <h5>Write at least 1 character of new Product Name or Person Login and press <b>Search</b></h5>
+{% endif %}
 {{ form(form) }}
 <br>
 
