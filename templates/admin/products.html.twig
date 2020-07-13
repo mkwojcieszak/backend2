@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href='{{ path('admin.products') }}'><button class='btn btn-primary'>All</button></a>
+    <a href='{{ path('admin.products', {state: 0}) }}'><button class='btn btn-primary'>Pre-public</button></a>
+    <a href='{{ path('admin.products', {state: 1}) }}'><button class='btn btn-primary'>Public</button></a>
+    <h1>
+        {%if state == 0 %}Pre-public {% endif %}
+        {%if state == 1 %}Public {% endif %}
+        {%if state == -1 %}All {% endif %}
+        Products:
+    </h1>
+    <table class='table'>
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td>Info</td>
+                <td>Public Date</td>
+                <td>Actions</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{product.name}}</td>
+                    <td>{{product.info}}</td>
+                    <td> {{ product.publicDate|date('Y-m-d H:i:s') }}</td>
+                    <td>
+                        <a href="{{ path('admin.editProduct', { id: product.id }) }}"><button class='btn btn-success'>Edit</button></a>
+                        <a href="{{ path('admin.deleteProduct', { id: product.id }) }}"><button class='btn btn-primary'>Delete</button></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    <table>
+    <a href='{{ path('admin.addProduct') }}'><button class='btn btn-primary'>Add Product</button></a><br>
+    <a href='{{ path('admin.panel') }}'><button class='btn btn-primary'>Panel</button></a><br>
+    <a href='{{ path('app_logout') }}'><button class='btn btn-primary'>Logout</button></a>
+{% endblock %}

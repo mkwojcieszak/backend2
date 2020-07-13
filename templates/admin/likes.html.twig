@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Likes</h1>
+
+{% for message in app.flashes('failure') %}
+    <div class="alert alert-failure">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
+
+Products: 
+<select onchange="
+    document.querySelector('.product-input').value = this.options[this.selectedIndex].text;
+">
+<option value="-1"></option>
+{% for product in selectProducts %}
+<option value="{{product.id}}">{{product.name}}</option>
+{% endfor %}
+</select>
+<br>
+Persons: 
+<select onchange="
+    document.querySelector('.person-input').value = this.options[this.selectedIndex].text;
+">
+<option value="-1"></option>
+{% for person in selectPersons %}
+<option value="{{person.id}}">{{person.login}}</option>
+{% endfor %}
+</select>
+<br>
+{{ form(form) }}
+{% if product != null and person != null%}
+    {% if resultLikes|length == 0 %}
+    <h2>{{person}} does not like {{product}}.</h2>
+    <a href="{{ path('admin.addLike', { productId: product.id, personId: person.id }) }}"><button class='btn btn-success'>Create Like</button></a>
+    {% else %}
+    <h2>{{person}} likes {{product}}.</h2>
+    {% endif %}
+{% else %}
+    {% if product != null and person == null %}
+        <h2>Results for {{product}}:</h2>
+    {% endif %}
+    {% if product == null and person != null %}
+        <h2>Results for {{person}}:</h2>
+    {% endif %}
+    <ul>
+    {% for like in resultLikes %}
+        <li>
+            {{like.personLogin}} likes {{like.productName}} 
+            ( <a href="{{ path('admin.editLikeForm', { oldPersonId: like.personId, oldProductId: like.productId}) }}">Edit</a> ) 
+            ( <a href="{{ path('admin.deleteLike', { personId: like.personId, productId: like.productId}) }}">Delete</a> ) 
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+<br>
+<a href='{{ path('admin.panel') }}'><button class='btn btn-primary'>Panel</button></a><br>
+    <a href='{{ path('app_logout') }}'><button class='btn btn-primary'>Logout</button></a>
+{% endblock %}
+
+
+

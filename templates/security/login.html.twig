@@ -1,8 +1,12 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Log in!{% endblock %}
-
 {% block body %}
+
+{% for message in app.flashes('failure') %}
+    <div class="alert alert-failure">
+        <b>{{ message }}</b>
+    </div>
+{% endfor %}
+
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -39,4 +43,6 @@
         Sign in
     </button>
 </form>
+<br>
+<a href="{{ path('register') }}"><button class='btn btn-primary'>Create New Account</button></a>
 {% endblock %}

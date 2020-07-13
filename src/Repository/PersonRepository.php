@@ -19,6 +19,26 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
+    public function findByLoginSubstring($str) {
+
+        $arr = $this->findAll();
+        $returnArray = array();
+        forEach($arr as $pers) {
+            $login = $pers->getLogin();
+            if (str_contains($login, $str)) { $returnArray[] = $pers; }
+        }
+
+        return $returnArray;
+
+        // return $this->createQueryBuilder('p')
+        //     ->andWhere('str_contains(p.login, :str)')
+        //     ->setParameter('str', $str)
+        //     ->orderBy('p.login', 'DESC')
+        //     ->getQuery()
+        //     ->getResult()
+        // ;
+    }
+
     // /**
     //  * @return Person[] Returns an array of Person objects
     //  */

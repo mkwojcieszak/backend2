@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -40,23 +41,47 @@ class Product
      *  inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")}
      *  )
      */
-    private $likes;
+    private $persons;
 
     public function __construct() {
-        $this->$likes = new ArrayCollection();
+        $this->persons = new ArrayCollection();
     }
 
-    public function addPersonProduct(Person $person) {
-        if ($this->$likes->contains($person)) {
+    public function getPersons() {
+        return $this->persons;
+    }
+    
+    public function checkLike(Person $person) {
+        return $this->persons->contains($person);
+    }
+
+    public function getLikes() {
+        $likes = array();
+        forEach($this->persons as $person) {
+            $like = array();
+            $like['productId'] = $this->getId();
+            $like['personId'] = $person->getId();
+            $like['productName'] = $this->getName();
+            $like['personLogin'] = $person->getLogin();
+            $likes[] = $like;
+        }
+        return $likes;
+    }
+
+    public function addPerson(Person $person) {
+        if ($this->persons->contains($person)) {
             return;
         }
-        $this->$likes[] = $person;
+        $this->persons[] = $person;
     }
 
-    public function getPersonProducts() {
-        return $this->$likes;
+    public function removePerson(Person $person): self
+    {
+        if ($this->persons->contains($person)) {
+            $this->persons->removeElement($person);
+        }
+        return $this;
     }
-
 
     public function getId(): ?int
     {
@@ -97,5 +122,9 @@ class Product
         $this->public_date = $public_date;
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->name;
     }
 }

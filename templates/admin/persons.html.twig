@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+<script>
+function setFilter(val) {
+    document.querySelector('.filter-selection').setAttribute(`href`, `/admin/persons/` + val);
+}
+</script>
+
+{% endblock %}
+
+{% block body %}
+    <!--
+    <a href='{{ path('admin.persons') }}'><button class='btn btn-primary'>All</button></a>
+    <a href='{{ path('admin.persons', {state: 1}) }}'><button class='btn btn-primary'>Active</button></a>
+    <a href='{{ path('admin.persons', {state: 2}) }}'><button class='btn btn-primary'>Banned</button></a>
+    <a href='{{ path('admin.persons', {state: 3}) }}'><button class='btn btn-primary'>Deleted</button></a>
+    --!>
+
+    <select onchange=" setFilter(this.options[this.selectedIndex].value); ">
+        <option value='0'>All</option>
+        <option value='1'>Active</option>
+        <option value='2'>Banned</option>
+        <option value='3'>Deleted</option>
+    </select>
+    <a class='filter-selection' href='{{ path('admin.persons') }}'><button class='btn btn-primary'>Filter</button></a>
+    <h1>
+        {% if state == 0 %}All
+        {% elseif state == 1 %}Active
+        {% elseif state == 2 %}Banned
+        {% elseif state == 3 %}Deleted {% endif %}
+        People:
+    </h1>
+    <table class='table'>
+        <thead>
+            <tr>
+                <td>Login</td>
+                <td>Last Name</td>
+                <td>First Name</td>
+                <td>Status</td>
+                <td>Actions</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in persons %}
+                <tr>
+                    <td>{{person.login}}</td>
+                    <td>{{person.lName}}</td>
+                    <td>{{person.fName}}</td>
+                    <td>
+                        {%if person.state == 1 %}Active{% endif %}
+                        {%if person.state == 2 %}Banned{% endif %}
+                        {%if person.state == 3 %}Deleted{% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin.editPerson', { id: person.id }) }}"><button class='btn btn-success'>Edit</button></a>
+                        {% if person.state == 3 %}
+                            <a href="{{ path('admin.setPersonState', { id: person.id, state: 1 }) }}"><button class='btn btn-primary'>Undelete</button></a>
+                        {% else %}
+                                {% if person.state == 2 %}
+                                    <a href="{{ path('admin.setPersonState', { id: person.id, state: 1 }) }}"><button class='btn btn-primary'>Unban</button></a>
+                                {% else %}
+                                    <a href="{{ path('admin.setPersonState', { id: person.id, state: 2 }) }}"><button class='btn btn-primary'>Ban</button></a>
+                                {% endif %}
+                            <a href="{{ path('admin.setPersonState', { id: person.id, state: 3 }) }}"><button class='btn btn-primary'>Delete</button></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    <table>
+    <a href='{{ path('admin.addPerson') }}'><button class='btn btn-primary'>Add Person</button></a><br>
+    <a href='{{ path('admin.panel') }}'><button class='btn btn-primary'>Panel</button></a><br>
+    <a href='{{ path('app_logout') }}'><button class='btn btn-primary'>Logout</button></a>
+{% endblock %}

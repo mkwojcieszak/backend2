@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use App\Repository\PersonRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @ORM\Entity(repositoryClass=PersonRepository::class)
  */
@@ -36,6 +38,60 @@ class Person
      * @ORM\Column(type="smallint")
      */
     private $state;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product", mappedBy="persons")
+     */
+    private $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+        $this->setState(1);
+    }
+
+    public function getProducts():  Collection
+    {
+        return $this->products;
+    }
+
+    public function checkLike(Product $product) {
+        return $this->products->contains($product);
+    }
+
+    public function getLikes() {
+        $likes = array();
+        forEach($this->products as $product) {
+            $like = array();
+            $like['personId'] = $this->getId();
+            $like['productId'] = $product->getId();
+            $like['personLogin'] = $this->getLogin();
+            $like['productName'] = $product->getName();
+            $likes[] = $like;
+        }
+        return $likes;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->addPerson($this);
+        }
+        return $this;
+    }
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->contains($product)) {
+            $this->products->removeElement($product);
+            $product->removePerson($this);
+        }
+        return $this;
+    }
+
+
+
 
 
 
@@ -90,5 +146,9 @@ class Person
         $this->state = $state;
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->login;
     }
 }

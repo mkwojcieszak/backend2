@@ -19,6 +19,47 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function findPrePublic() {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.public_date > :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findPostPublic() {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.public_date <= :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByNameSubstring($str) {
+        $arr = $this->findAll();
+        $returnArray = array();
+        forEach($arr as $prod) {
+            $name = $prod->getName();
+            if (str_contains($name, $str)) { $returnArray[] = $prod; }
+        }
+
+        return $returnArray;
+        // return $this->createQueryBuilder('p')
+        //     ->andWhere('strpos(p.name, :str) !== false')
+        //     //str_contains(p.name, :str)')
+        //     ->setParameter('str', $str)
+        //     ->orderBy('p.name', 'DESC')
+        //     ->getQuery()
+        //     ->getResult()
+        // ;
+    }
+
+
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */
