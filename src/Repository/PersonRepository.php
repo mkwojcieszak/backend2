@@ -25,7 +25,7 @@ class PersonRepository extends ServiceEntityRepository
         $returnArray = array();
         forEach($arr as $pers) {
             $login = $pers->getLogin();
-            if (str_contains($login, $str)) { $returnArray[] = $pers; }
+            if (str_contains(strtoupper($login), strtoupper($str))) { $returnArray[] = $pers; }
         }
 
         return $returnArray;

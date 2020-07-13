@@ -2,11 +2,13 @@
 
 {% block body %}
     <h3>Admin Panel</h3>
-        Buttons: Add Product, products list, Add Person, Person's List(by status)
-        <a href='{{ path('admin.addProduct') }}'><button class='btn btn-primary'>Add Product</button></a>
-        <a href='{{ path('admin.addPerson') }}'><button class='btn btn-primary'>Add Person</button></a>
         <a href='{{ path('admin.products') }}'><button class='btn btn-primary'>Products</button></a>
+        <a href='{{ path('admin.addProduct') }}'><button class='btn btn-primary'>Add Product</button></a>
+        <br>
         <a href='{{ path('admin.persons') }}'><button class='btn btn-primary'>Persons</button></a>
+        <a href='{{ path('admin.addPerson') }}'><button class='btn btn-primary'>Add Person</button></a>
+        <br>
         <a href='{{ path('admin.likes') }}'><button class='btn btn-primary'>Likes</button></a>
+        <br>
         <a href='{{ path('app_logout') }}'><button class='btn btn-primary'>Logout</button></a>
 {% endblock %}

@@ -44,7 +44,7 @@ class ProductRepository extends ServiceEntityRepository
         $returnArray = array();
         forEach($arr as $prod) {
             $name = $prod->getName();
-            if (str_contains($name, $str)) { $returnArray[] = $prod; }
+            if (str_contains(strtoupper($name), strtoupper($str))) { $returnArray[] = $prod; }
         }
 
         return $returnArray;
