@@ -1,5 +1,22 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+<script>
+
+function searchById() {
+    let productId = document.querySelector('.product-input').dataset.id;
+    let personId = document.querySelector('.person-input').dataset.id;
+    let productName = document.querySelector('.product-input').value;
+    let personName = document.querySelector('.person-input').value;
+    if (productName == "") { productName = -1; }
+    if (personName == "") { personName = -1; }
+    location.href=`/admin/likes/${productName}/${personName}/${productId}/${personId}`;
+}
+document.querySelector('.search-by-id').addEventListener('click', () => { searchById(); });
+
+</script>
+{% endblock %}
+
 {% block body %}
 <h1>Likes</h1>
 
@@ -21,11 +38,14 @@
     {% if selectProducts|length > 0 %}
         Products: 
         <select onchange="
-            document.querySelector('.product-input').value = this.options[this.selectedIndex].text;
+            document.querySelector('.product-input').value = this.options[this.selectedIndex].dataset.name;
+            document.querySelector('.product-input').dataset.id = this.options[this.selectedIndex].dataset.id;
         ">
-        <option value="-1"></option>
+        <option data-id="-1" data-name=" "></option>
         {% for product in selectProducts %}
-        <option value="{{product.id}}">{{product.name}}</option>
+        <option data-id="{{product.id}}" data-name="{{product.name}}">
+            <b>{{product.name}}</b> [ID: {{product.id}}] [{{ product.publicDate|date('Y:m:d H:i') }}]
+        </option>
         {% endfor %}
         </select>
         <br>
@@ -34,11 +54,14 @@
     {% if selectPersons|length > 0 %}
         Persons: 
         <select onchange="
-            document.querySelector('.person-input').value = this.options[this.selectedIndex].text;
+            document.querySelector('.person-input').value = this.options[this.selectedIndex].dataset.login;
+            document.querySelector('.person-input').dataset.id = this.options[this.selectedIndex].dataset.dataset.id;
         ">
-        <option value="-1"></option>
+        <option data-id="-1" data-login=" "></option>
         {% for person in selectPersons %}
-        <option value="{{person.id}}">{{person.login}}</option>
+        <option data-id="{{person.id}}" data-login="{{person.login}}">
+            <b>{{person.login}}</b> [ID: {{person.id}}]
+        </option>
         {% endfor %}
         </select>
         <br>
@@ -48,16 +71,24 @@
 {% endif %}
 
 {{ form(form) }}
+<button class='search-by-id btn btn-success'>Search By ID</button>
+<br>
+
+
+
+
 {% if product != null and person != null%}
     {% if resultLikes|length == 0 %}
-    <h2>{{person}} does not like {{product}}.</h2>
+    <h2>{{person}} does not like {{product}}  [ID: {{product.id}}] [{{ product.publicDate|date('Y:m:d H:i') }}].</h2>
     <a href="{{ path('admin.addLike', { productId: product.id, personId: person.id }) }}"><button class='btn btn-success'>Create Like</button></a>
     {% else %}
-    <h2>{{person}} likes {{product}}.</h2>
+    <h2>
+        {{person}} likes {{product}}  [ID: {{product.id}}] [{{ product.publicDate|date('Y:m:d H:i') }}] ( <a href="{{ path('admin.editLikeForm', { oldPersonId: person.id, oldProductId: product.id}) }}">Edit</a> ) 
+    </h2>
     {% endif %}
 {% else %}
     {% if product != null and person == null %}
-        <h2>Results for product {{product}}:</h2>
+        <h2>Results for product {{product}} [ID: {{product.id}}] [{{product.publicDate|date('Y-m-d H:i')}}]:</h2>
     {% endif %}
     {% if product == null and person != null %}
         <h2>Results for person {{person}}:</h2>
@@ -65,7 +96,7 @@
     <ul>
     {% for like in resultLikes %}
         <li>
-            {{like.personLogin}} likes {{like.productName}} 
+            <b>{{like.personLogin}}</b> [ID: {{like.personId}}] likes <b>{{like.productName}}</b> [ID: {{like.productId}}]
             ( <a href="{{ path('admin.editLikeForm', { oldPersonId: like.personId, oldProductId: like.productId}) }}">Edit</a> ) 
             ( <a href="{{ path('admin.deleteLike', { personId: like.personId, productId: like.productId}) }}">Delete</a> ) 
         </li>

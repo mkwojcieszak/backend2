@@ -102,7 +102,7 @@ class MainController extends AbstractController
      */
 
     public function deleteProduct(Request $request, ProductRepository $repo, $id, PersonRepository $persRepo) {
-        //Deleting a products deletes his associations with Persons beforehand.
+        //Deleting a products deletes his likes beforehand.
 
         $product = $repo->find($id);
         $em = $this->getDoctrine()->getManager();
