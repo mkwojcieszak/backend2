@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Person
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

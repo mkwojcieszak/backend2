@@ -11,23 +11,23 @@ function setFilter(val) {
 {% block body %}
     <!--
     <a href='{{ path('admin.persons') }}'><button class='btn btn-primary'>All</button></a>
-    <a href='{{ path('admin.persons', {state: 1}) }}'><button class='btn btn-primary'>Active</button></a>
-    <a href='{{ path('admin.persons', {state: 2}) }}'><button class='btn btn-primary'>Banned</button></a>
-    <a href='{{ path('admin.persons', {state: 3}) }}'><button class='btn btn-primary'>Deleted</button></a>
+    <a href='{{ path('admin.persons', {state: PERSON_STATE_ACTIVE}) }}'><button class='btn btn-primary'>Active</button></a>
+    <a href='{{ path('admin.persons', {state: PERSON_STATE_BANNED}) }}'><button class='btn btn-primary'>Banned</button></a>
+    <a href='{{ path('admin.persons', {state: PERSON_STATE_DELETED}) }}'><button class='btn btn-primary'>Deleted</button></a>
     --!>
 
     <select onchange=" setFilter(this.options[this.selectedIndex].value); ">
         <option value='0'>All</option>
-        <option value='1'>Active</option>
-        <option value='2'>Banned</option>
-        <option value='3'>Deleted</option>
+        <option value='{{PERSON_STATE_ACTIVE}}'>Active</option>
+        <option value='{{PERSON_STATE_BANNED}}'>Banned</option>
+        <option value='{{PERSON_STATE_DELETED}}'>Deleted</option>
     </select>
     <a class='filter-selection' href='{{ path('admin.persons') }}'><button class='btn btn-primary'>Filter</button></a>
     <h1>
-        {% if state == 0 %}All
-        {% elseif state == 1 %}Active
-        {% elseif state == 2 %}Banned
-        {% elseif state == 3 %}Deleted {% endif %}
+        {% if state == PERSON_STATE_ALL %}All
+        {% elseif state == PERSON_STATE_ACTIVE %}Active
+        {% elseif state == PERSON_STATE_BANNED %}Banned
+        {% elseif state == PERSON_STATE_DELETED %}Deleted {% endif %}
         People:
     </h1>
     <table class='table'>
@@ -47,21 +47,21 @@ function setFilter(val) {
                     <td>{{person.lName}}</td>
                     <td>{{person.fName}}</td>
                     <td>
-                        {%if person.state == 1 %}Active{% endif %}
-                        {%if person.state == 2 %}Banned{% endif %}
-                        {%if person.state == 3 %}Deleted{% endif %}
+                        {%if person.state == PERSON_STATE_ACTIVE %}Active{% endif %}
+                        {%if person.state == PERSON_STATE_BANNED %}Banned{% endif %}
+                        {%if person.state == PERSON_STATE_DELETED %}Deleted{% endif %}
                     </td>
                     <td>
                         <a href="{{ path('admin.editPerson', { id: person.id }) }}"><button class='btn btn-success'>Edit</button></a>
-                        {% if person.state == 3 %}
-                            <a href="{{ path('admin.setPersonState', { id: person.id, state: 1 }) }}"><button class='btn btn-primary'>Undelete</button></a>
+                        {% if person.state == PERSON_STATE_DELETED %}
+                            <a href="{{ path('admin.setPersonState', { id: person.id, state: PERSON_STATE_ACTIVE }) }}"><button class='btn btn-primary'>Undelete</button></a>
                         {% else %}
-                                {% if person.state == 2 %}
-                                    <a href="{{ path('admin.setPersonState', { id: person.id, state: 1 }) }}"><button class='btn btn-primary'>Unban</button></a>
+                                {% if person.state == PERSON_STATE_BANNED %}
+                                    <a href="{{ path('admin.setPersonState', { id: person.id, state: PERSON_STATE_ACTIVE }) }}"><button class='btn btn-primary'>Unban</button></a>
                                 {% else %}
-                                    <a href="{{ path('admin.setPersonState', { id: person.id, state: 2 }) }}"><button class='btn btn-primary'>Ban</button></a>
+                                    <a href="{{ path('admin.setPersonState', { id: person.id, state: PERSON_STATE_BANNED }) }}"><button class='btn btn-primary'>Ban</button></a>
                                 {% endif %}
-                            <a href="{{ path('admin.setPersonState', { id: person.id, state: 3 }) }}"><button class='btn btn-primary'>Delete</button></a>
+                            <a href="{{ path('admin.setPersonState', { id: person.id, state: PERSON_STATE_DELETED }) }}"><button class='btn btn-primary'>Delete</button></a>
                         {% endif %}
                     </td>
                 </tr>

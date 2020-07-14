@@ -123,10 +123,14 @@ class MainController extends AbstractController
      */
     public function persons(PersonRepository $repo, $state)
     {
+        $this->get('twig')->addGlobal('PERSON_STATE_ALL', $this->getParameter('PERSON_STATE_ALL'));
+        $this->get('twig')->addGlobal('PERSON_STATE_ACTIVE', $this->getParameter('PERSON_STATE_ACTIVE'));
+        $this->get('twig')->addGlobal('PERSON_STATE_BANNED', $this->getParameter('PERSON_STATE_BANNED'));
+        $this->get('twig')->addGlobal('PERSON_STATE_DELETED', $this->getParameter('PERSON_STATE_DELETED'));
         //States: 1 - active, 2 - banned, 3 - deleted, 0 - all
         $persons = array();
 
-        if ($state == 0) {
+        if ($state == $this->getParameter('PERSON_STATE_ALL')) {
             $persons = $repo->findAll();
         } else {
             $persons = $repo->findBy(array('state' => $state));
