@@ -19,6 +19,12 @@ use App\Repository\ProductRepository;
 
 class MainController extends AbstractController
 {
+
+    const PERSON_STATE_ALL = 0;
+    const PERSON_STATE_ACTIVE = 1;
+    const PERSON_STATE_BANNED = 2;
+    const PERSON_STATE_DELETED = 3;
+
     /**
      * @Route("/panel", name="panel")
      */
@@ -123,14 +129,14 @@ class MainController extends AbstractController
      */
     public function persons(PersonRepository $repo, $state)
     {
-        $this->get('twig')->addGlobal('PERSON_STATE_ALL', $this->getParameter('PERSON_STATE_ALL'));
-        $this->get('twig')->addGlobal('PERSON_STATE_ACTIVE', $this->getParameter('PERSON_STATE_ACTIVE'));
-        $this->get('twig')->addGlobal('PERSON_STATE_BANNED', $this->getParameter('PERSON_STATE_BANNED'));
-        $this->get('twig')->addGlobal('PERSON_STATE_DELETED', $this->getParameter('PERSON_STATE_DELETED'));
+        // $this->get('twig')->addGlobal('PERSON_STATE_ALL', $this->getParameter('PERSON_STATE_ALL'));
+        // $this->get('twig')->addGlobal('PERSON_STATE_ACTIVE', $this->getParameter('PERSON_STATE_ACTIVE'));
+        // $this->get('twig')->addGlobal('PERSON_STATE_BANNED', $this->getParameter('PERSON_STATE_BANNED'));
+        // $this->get('twig')->addGlobal('PERSON_STATE_DELETED', $this->getParameter('PERSON_STATE_DELETED'));
         //States: 1 - active, 2 - banned, 3 - deleted, 0 - all
         $persons = array();
 
-        if ($state == $this->getParameter('PERSON_STATE_ALL')) {
+        if ($state == MainController::PERSON_STATE_ALL) {
             $persons = $repo->findAll();
         } else {
             $persons = $repo->findBy(array('state' => $state));
@@ -138,7 +144,8 @@ class MainController extends AbstractController
 
         return $this->render('admin/persons.html.twig', [
             'persons' => $persons,
-            'state' => $state
+            'state' => $state,
+            'controller' => $this
         ]);
     }
 

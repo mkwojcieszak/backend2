@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Controller\MainController;
 
 class PersonType extends AbstractType
 {
@@ -25,9 +26,9 @@ class PersonType extends AbstractType
             ->add('state', ChoiceType::class, [
                 'label' => "State",
                 'choices' => [
-                    'Active' => 1,
-                    'Banned' => 2,
-                    'Deleted' => 3
+                    'Active' => MainController::PERSON_STATE_ACTIVE,
+                    'Banned' => MainController::PERSON_STATE_BANNED,
+                    'Deleted' => MainController::PERSON_STATE_DELETED
                 ]
             ])
             ->add('save', SubmitType::class, [
