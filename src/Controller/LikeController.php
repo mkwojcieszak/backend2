@@ -106,7 +106,7 @@ class LikeController extends AbstractController
                 'empty_data' => '',
                 'attr' => [
                     'class' => 'product-input', // class used for javascript @ select Button onchange event
-                    'data-id' => $formProductId
+                    'data-id' => $formProductId // used for searchById script in likes.html.twig
                     ]
             ])
             ->add('personLogin', TextType::class, [
@@ -115,7 +115,7 @@ class LikeController extends AbstractController
                 'empty_data' => '',
                 'attr' => [
                     'class' => 'person-input', //  class used for javascript @ select Button onchange event
-                    'data-id' => $formPersonId
+                    'data-id' => $formPersonId // used for searchById script in likes.html.twig
                 ]
             ])
             ->add('search', SubmitType::class, [
@@ -284,7 +284,7 @@ class LikeController extends AbstractController
 
 
         // Create form for finding Products and Persons by substring of their name/login
-
+        
         $formProductId = -1;
         if ($product != null) {  $formProductId = $product->getId(); }
 
@@ -297,7 +297,7 @@ class LikeController extends AbstractController
                 'data' => $productName,
                 'empty_data' => '',
                 'attr' => [
-                    'data-id' => $formProductId,
+                    'data-id' => $formProductId, // used for searchById script in likes.html.twig
                     'class' => 'product-input'  // for javascript @ select Button onchange event
                 ]
             ])
@@ -307,7 +307,7 @@ class LikeController extends AbstractController
                 'empty_data' => '',
                 'attr' => [
                     'data-id' => $formPersonId,
-                    'class' => 'person-input'  // for javascript @ select Button onchange event
+                    'class' => 'person-input'
                     ]
             ])
             ->add('search', SubmitType::class, [
@@ -315,7 +315,7 @@ class LikeController extends AbstractController
                 'attr' => [
                     'class' => 'btn btn-success old-like-data',
                     'data-productid' => $oldProductId,
-                    'data-personid' => $oldPersonId
+                    'data-personid' => $oldPersonId // used for searchById script in likes.html.twig
                     ]
             ])
             ->getForm()
